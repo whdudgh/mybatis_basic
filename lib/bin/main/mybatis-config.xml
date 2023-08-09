@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+                          "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- Database properties 설정 파일 -->
+	<properties resource="db-config.properties" />
+
+	<!-- MyBatis에서 사용할 자바빈(JavaBean) 별칭 등록 -->
+	<typeAliases>
+		<typeAlias type="com.ezen.mybatis.domain.employee.dto.Employee" alias="Employee" />
+		<typeAlias type="com.ezen.mybatis.domain.member.dto.Member" alias="Member" />
+		<typeAlias type="com.ezen.mybatis.domain.board.dto.BoardDTO" alias="BoardDTO" />
+		<typeAlias type="com.ezen.mybatis.domain.article.dto.ArticleDTO" alias="ArticleDTO" />
+		<typeAlias type="com.ezen.mybatis.domain.common.web.PageParams" alias="PageParams" />
+		<typeAlias type="com.ezen.mybatis.domain.common.web.Pagination" alias="Pagination" />
+	</typeAliases>
+
+	<!-- 다수의 Database에 접근하거나 개발, 테스트, 운영 환경에 맞는 다중 환경 설정 지원 -->
+	<environments default="development">
+		
+		<environment id="development">
+			<!-- 트랜잭션 관리 방법 설정
+			  - JDBC : JDBC API의 commit(), rollback() 메소드를 이용하여 MyBatis 자체에서 트랜잭션 관리 
+			  - MANAGED : WAS(WebLogic, WebSphere, JBoss 등)에서 지원하는 트랜잭션 관리 이용 -->
+			<transactionManager type="JDBC" />
+			<!-- DataSource 설정 : MyBatis는 DataSource 구현체(DBCP)를 이용하여 DB 연결 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${database.driver}" />
+				<property name="url" value="${database.url}" />
+				<property name="username" value="${database.username}" />
+				<property name="password" value="${database.password}" />
+				<!-- 최대 몇개의 커넥션을 유지할것인지 -->
+				<property name="poolMaximumActiveConnections" value="10" />
+				<!-- 10까지 갔다가 몇까지 떨어질지 -->
+				<property name="poolMaximumIdleConnections" value="5" />
+				<!-- ~~초 뒤에 연결안되면 자동으로 끊김 -->
+				<property name="poolMaximumCheckoutTime" value="10000" />
+			</dataSource>
+		</environment>
+		
+		<!-- 
+		<environment id="product">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+			</dataSource>
+		</environment>
+		 -->
+		
+	</environments>
+
+	<!-- SQL XML Mapper 파일 설정 -->
+	<mappers>
+		<!-- 자바 클래스패스에 위치한 XML 매퍼 파일 설정 -->
+		<mapper resource="com/ezen/mybatis/domain/employee/mapper/EmployeeMapper.xml" />
+
+		<!-- 게시판 Mapper클래스를 위한 XML매퍼 파일 설정 -->
+		<mapper resource="com/ezen/mybatis/domain/board/mapper/BoardMapper.xml" />
+		
+		<!-- 게시글 Mapper클래스를 위한 XML매퍼 파일 설정 -->
+		<mapper resource="com/ezen/mybatis/domain/board/mapper/ArticleMapper.xml" />
+		
+		<!-- Annotation 기반 Mapper 인퍼페이스 경로 설정 -->
+		 <mapper class="com.ezen.mybatis.domain.employee.mapper.EmployeeMapper2" />
+		 
+		<!-- 자바 클래스패스에 위치한 XML 매퍼 MemberMapper파일 설정 -->
+		<mapper resource="com/ezen/mybatis/domain/member/mapper/MemberMapper.xml" />
+	</mappers>
+
+</configuration>

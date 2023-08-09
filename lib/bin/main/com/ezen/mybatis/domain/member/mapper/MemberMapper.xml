@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+                        
+<!-- 네임스페이스(사용영역) 설정 인터페이스이름과 풀패키지명 설정-->
+<mapper namespace="com.ezen.mybatis.domain.member.mapper.MemberMapper">
+	
+	<!-- 회원 생성 -->
+	<insert id="create" parameterType="Member">
+		INSERT INTO member 
+					(id,
+					passwd,
+					name,
+					email)
+		VALUES 		(#{id},
+					 #{passwd},
+					 #{name},
+					 #{email})
+	</insert>
+	
+	
+	 <!--아이디와 패스워드로 특정회원 불러오기(One) @Prams어노테이션을 사용했기 때문에 paramType필요없음. -->
+	<select id="findByUser" resultType="Member" >
+		SELECT id,
+			   name,
+			   TO_CHAR(regdate, 'yyyy-MM-DD DAY') "regdate" 
+		FROM   member
+		WHERE  id = #{id} AND passwd = #{passwd}
+	</select>
+	
+	<!-- 모든 회원 불러오기(List) -->
+	<select id="findByAll" resultType="Member">
+	<!-- <select id="findById"  parameterType="java.lang.Integer" resultType="Employee"> -->
+		SELECT id,
+			   name,
+			   email,
+			   TO_CHAR(regdate, 'yyyy-MM-DD DAY') "regdate"
+		FROM member
+	</select>
+	
+	<!-- 회원 아이디로 특정회원 찾아오기(One) -->
+	<select id="findById" parameterType="string" resultType="Member">
+	<!-- <select id="findById"  parameterType="java.lang.Integer" resultType="Employee"> -->
+		SELECT id, 
+			   passwd,
+			   name, 
+			   email, 
+			   TO_CHAR(regdate, 'yyyy-MM-DD DAY') "regdate"
+		FROM member
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 동적 SQL
+	<select id="search" parameterType="map" resultType="Member">
+		SELECT employee_id  "id", 
+		       first_name   "firstName", 
+		       salary
+		FROM   employees
+		<if test="type != null">
+			<choose>
+				<when test="type == 'id'">
+					WHERE employee_id = #{value}
+				</when>
+				<when test="type == 'name'">
+					WHERE first_name like '%' || #{value}
+				</when>
+				<otherwise></otherwise>
+			</choose>
+		</if>
+	</select>-->
+</mapper>
