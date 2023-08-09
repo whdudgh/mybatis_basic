@@ -110,6 +110,8 @@ public class ArticleMapperTest {
 		//when
 		ArticleMapper articleMapper = sqlSession.getMapper(ArticleMapper.class);
 		List<ArticleDTO> articleDTO = articleMapper.readArticle(groupNo);
+		//여기서 클릭되었을 때 id받아 해당하는 글 의 hitcount업데이트 구현 필요
+//		articleMapper.updateHitcount(articleId);
 		
 		//then
 		for (ArticleDTO article : articleDTO) {
@@ -119,8 +121,33 @@ public class ArticleMapperTest {
 	}
 	
 	@Test
-	@DisplayName("대댓글 달기")
+	@DisplayName("오더넘버 수정")
 	@Disabled
+	//대댓글 달기전 오더넘버 밀어내기(보드카테고리와 댓글을 작성하려는 아티클의 아이디가 필요함.) 
+	//대댓글보다 항상 먼저 실행되어야함.
+	//영호(2023-08-09)
+	public void updateOrderNoTest() {
+		
+		//given
+		int boardId = 10;
+		int articleId = 2;
+		
+		//when
+		ArticleMapper articleMapper = sqlSession.getMapper(ArticleMapper.class);
+		boolean result = articleMapper.updateOrderNo(articleId, boardId);
+		
+		//then
+		assertThat(result).isTrue();
+		if(result == true) {
+			sqlSession.commit();
+		}else {
+//			sqlSession.rollback();
+		}
+	}
+	
+	@Test
+	@DisplayName("대댓글 달기")
+//	@Disabled
 	//대댓글 달기 테스트 영호(2023-08-09)
 	public void setRReflyTest() {
 		
@@ -128,7 +155,7 @@ public class ArticleMapperTest {
 		ArticleDTO articleDTO = ArticleDTO.builder()
 										    .boardId(10)
 										    .writer("monday")
-										    .subject("새로달린 대댓글 입니다.")
+										    .subject("monday의 새로달린 대댓글 입니다.")
 										    .content("이사람 또왔내")
 										    .passwd("1234")
 										    .groupNo(1)
@@ -144,7 +171,7 @@ public class ArticleMapperTest {
 		log.debug("대댓글 등록 결과 : {}",result);
 		
 		if(result == true) {
-//			sqlSession.commit();			
+			sqlSession.commit();			
 		} else {
 //			sqlSession.rollback();			
 		}

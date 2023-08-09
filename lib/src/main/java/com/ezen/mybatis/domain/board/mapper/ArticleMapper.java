@@ -31,6 +31,13 @@ public interface ArticleMapper {
 	
 	/**
 	 * 조영호
+	 * @param articleId
+	 * 대댓글 적기 전 선택된게시판 id와 해당하는 글의 id를 받아와 order_no 증가
+	 */
+	public boolean updateOrderNo(@Param("articleId") int articleId, @Param("boardId") int boardId);
+	
+	/**
+	 * 조영호
 	 * @param articleDTO
 	 * @return 성공여부
 	 * 대댓글 등록하기 (2023-08-09)
