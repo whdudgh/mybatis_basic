@@ -17,33 +17,39 @@ repositories {
 }
 
 dependencies {
-    // 테스트를 위한 JUnit5 라이브러리
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    
-    // 테스트에서 코드체인을 위한 AssertJ 라이브러리
+    // JUnit5 라이브러리
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+
+	// AssertJ 라이브러리
+	// https://mvnrepository.com/artifact/org.assertj/assertj-core
 	testImplementation 'org.assertj:assertj-core:3.22.0'
 	
-	
-	//==============Logback사용하기 위한 라이브러리들===========================================
 	// Slf4j(로깅 표준 인터페이스) 라이브러리
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	implementation 'org.slf4j:slf4j-api:2.0.6'
-	// Logback 라이브러리 (Slf4j 구현체)
+	
+	// Logback 라이브러리(Slf4j 구현체)
+	// https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
 	implementation 'ch.qos.logback:logback-classic:1.4.5'
 	testImplementation 'ch.qos.logback:logback-classic:1.4.5'
-	//==========================================================================================
 	
-	// Lombok 라이브러리(어노테이션만 가지고있는 라이브러리 컴파일시만 적용)
+	// Lombok 라이브러리
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	
-	// 오라클 JDBC 드라이버
+	// JDBC 드라이버
+	// https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8
 	implementation 'com.oracle.database.jdbc:ojdbc8:21.9.0.0'
 	
-	// 아파치 DBCP API
+	// Apache DBCP API
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
 	implementation 'org.apache.commons:commons-dbcp2:2.8.0'
 	
-	// 마이바티스 프레임워크
+	// Mybatis 프레임워크
+	// https://mvnrepository.com/artifact/org.mybatis/mybatis
 	implementation 'org.mybatis:mybatis:3.5.9'
-	
+
+
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 

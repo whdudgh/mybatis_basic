@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 네임스페이스(사용영역) 설정 -->
+<mapper
+	namespace="com.ezen.mybatis.domain.common.web.mapper.PaginationMapper">
+
+	<!-- 게시판 전체 게시글 갯수 -->
+	<select id="findAllCount" resultType="int">
+		SELECT count(article_id) totalPages
+		FROM article
+	</select>
+
+	<!-- 검색된 게시글 갯수 -->
+	<select id="findSearchCount" parameterType="map" resultType="int">
+		SELECT COUNT(article_id) totalPages
+		FROM article
+		<if test="type != null">
+			<choose>
+				<when test="type == 'id'">
+					WHERE board_id = #{boardId}
+				</when>
+				<when test="type == 'name'">
+					WHERE writer = '%' || #{value} || '%'
+					OR subject LIKE '%' || #{value} || '%'
+					OR content LIKE '%' || #{value} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- 페이징 처리를 위한 글 정보 출력 -->
+	<select id="findSearchPage" parameterType="map" resultType="ArticleDTO">
+		SELECT article_id "articleId",
+			   subject, 
+      		   writer, 
+        	   regdate, 
+        	   hitcount
+		FROM article
+		<if test="type != null">
+			<choose>
+				<when test="type == 'id'">
+					WHERE board_id = #{boardId}
+				</when>
+				<when test="type == 'name'">
+					WHERE writer = '%' || #{value} || '%'
+					OR subject LIKE '%' || #{value} || '%'
+					OR content LIKE '%' || #{value} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- 계층형 게시판 및 페이징 처리를 위한 게시글목록 출력 -->
+	<select id="findSearchArticle" parameterType="map" resultType="ArticleDTO">
+		SELECT subject, 
+     	  	   writer, 
+      	  	   regdate, 
+        	   hitcount 
+		FROM   (SELECT CEIL(rownum / #{rows}) requestPage, 
+               subject, 
+               writer, 
+               TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI') regdate, 
+               hitcount 
+            FROM   (SELECT subject, 
+                           writer, 
+                           regdate, 
+                           hitcount 
+                    FROM   article 
+                    WHERE  board_id = #{boardId}
+                    ORDER  BY group_no DESC, 
+                              order_no ASC)) 
+		WHERE  requestPage = 1
+	</select>
+	
+</mapper>
